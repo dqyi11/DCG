@@ -13,4 +13,5 @@ if __name__ == '__main__':
     parser = CYKParser()
     ss = parser.parse(SENTENCE2)
     
+    #ss.draw()
     print ss

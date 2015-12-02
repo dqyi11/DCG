@@ -8,6 +8,7 @@ import os
 from nltk.parse import stanford
 from nltk.tree import *
 from language.Phrase import *
+from language.Word import *
 
 os.environ['STANFORD_PARSER'] = '../jars'
 os.environ['STANFORD_MODELS'] = '../jars'
@@ -22,22 +23,38 @@ class CYKParser(object):
         sentences = self.parser.raw_parse_sents( (sentence,) )
         for line in sentences:
             for sentence in line:
+                #return sentence
                 return self.toPhrase( sentence )
             
     def toPhrase(self, tree):
     
-        if type(tree) is Tree:
-            if tree.label() == "ROOT":
-                p = self.traverseTree( tree )
-                return p
-        return None
+        return self.traverseTree( tree )
     
     def traverseTree(self, tree):
         
-        p = Phrase()
-        for subtree in tree:
-            if type(subtree) == Tree:
-                self.traverseTree( subtree)
-        return p
+        if type(tree) is Tree:
+            print "LABEL: " + tree.label()
+            if tree.label() == "ROOT":
+                return self.traverseTree(tree[0])
+            elif tree.label() == "S":
+                return self.traverseTree(tree[0])
+            else:
+                p = Phrase()
+                p.type = tree.label()
+                word_idx = 0
+                for subtree in tree:
+                    if type(subtree) == Tree:
+                        if is_pos_type( p.type ):
+                            w = Word()
+                            w.type = p.type
+                            w.order = word_idx
+                            w.text = str( p )
+                            word_idx += 1
+                            p.words.append(w)
+                        elif is_phrase_type( p.type ):
+                            child_phrase = self.traverseTree( subtree )
+                            p.children.append(child_phrase)
+                return p
+        return None
         
         
