@@ -4,7 +4,7 @@ Created on Dec 1, 2015
 @author: walter
 '''
 
-POS_TYPE = ["VB", "TO", "DT", "NN"]
+POS_TYPE = ("VB", "TO", "DT", "NN", "JJ", "VBZ", "RB", "IN", "NNS", "VBG", ",", "CC")
 
 def is_pos_type( type ):
     if type in POS_TYPE:

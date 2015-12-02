@@ -23,7 +23,7 @@ class CYKParser(object):
         sentences = self.parser.raw_parse_sents( (sentence,) )
         for line in sentences:
             for sentence in line:
-                #return sentence
+                sentence.draw()
                 return self.toPhrase( sentence )
             
     def toPhrase(self, tree):
@@ -36,22 +36,22 @@ class CYKParser(object):
             print "LABEL: " + tree.label()
             if tree.label() == "ROOT":
                 return self.traverseTree(tree[0])
-            elif tree.label() == "S":
-                return self.traverseTree(tree[0])
+            #elif tree.label() == "S":
+            #    return self.traverseTree(tree[0])
             else:
                 p = Phrase()
                 p.type = tree.label()
                 word_idx = 0
                 for subtree in tree:
                     if type(subtree) == Tree:
-                        if is_pos_type( p.type ):
+                        if is_pos_type( subtree.label() ):
                             w = Word()
-                            w.type = p.type
+                            w.type = subtree.label()
                             w.order = word_idx
-                            w.text = str( p )
+                            w.text = str( subtree[0] )
                             word_idx += 1
-                            p.words.append(w)
-                        elif is_phrase_type( p.type ):
+                            p.words.append(w)   
+                        elif is_phrase_type( subtree.label() ):
                             child_phrase = self.traverseTree( subtree )
                             p.children.append(child_phrase)
                 return p

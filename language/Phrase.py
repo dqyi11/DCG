@@ -4,7 +4,7 @@ Created on Dec 1, 2015
 @author: walter
 '''
 
-PHRASE_TYPE = ("VP", "PP", "NP")
+PHRASE_TYPE = ("S", "VP", "PP", "NP")
 
 def is_phrase_type( type ):
     if type in PHRASE_TYPE:
