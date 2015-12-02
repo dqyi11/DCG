@@ -15,7 +15,6 @@ os.environ['STANFORD_MODELS'] = '../jars'
 
 class CYKParser(object):
 
-
     def __init__(self):
         self.parser = stanford.StanfordParser("../jars/stanford-parser.jar","../jars/stanford-parser-3.4.1-models.jar")
         
