@@ -22,4 +22,11 @@ class Word(object):
     def __repr__(self):
         return str(self.type) + ":" + self.text
 
-        
+    def from_xml(self, node, doc):
+        self.type = node.nodeName
+        self.text = node.getAttribute("text")
+
+    def to_xml(self, parentNode, doc):
+        w_node = doc.createElement(self.type)
+        w_node.setAttribute("text", self.text)
+        parentNode.appendChild(w_node)        

@@ -4,7 +4,8 @@ Created on Dec 1, 2015
 @author: walter
 '''
 
-from xml.dom.minidom import Document
+from xml.dom import minidom
+from language.Word import *
 
 PHRASE_TYPE = ("S", "VP", "PP", "NP")
 
@@ -12,16 +13,6 @@ def is_phrase_type( type ):
     if type in PHRASE_TYPE:
         return True
     return False
-
-def to_xml(phrase, parentNode, doc):    
-    node = doc.createElement(phrase.type)
-    parentNode.appendChild(node)
-    for w in phrase.words:
-        w_node = doc.createElement(w.type)
-        w_node.setAttribute("text", w.text)
-        node.appendChild(w_node)
-    for c in phrase.children:
-        to_xml(c, node, doc) 
 
 class Phrase(object):
 
@@ -42,13 +33,43 @@ class Phrase(object):
         return str_repr
     
     def write_xml(self, filename):
-        
-        doc = Document()
-        
-        to_xml(self, doc, doc)
+        doc = minidom.Document()
+        root_node = doc.createElement("root")
+        doc.appendChild(root_node)
+        self.to_xml(root_node, doc)
         
         f = open(filename, 'w')
         doc.writexml( f, addindent='  ', newl='\n', encoding='utf-8')
         f.close()
-        
+
+    def to_xml(self, parentNode, doc):    
+        node = doc.createElement(self.type)
+        parentNode.appendChild(node)
+        for w in self.words:
+            w.to_xml(node, doc)
+        for c in self.children:
+            c.to_xml(node, doc)   
+            
+    def read_xml(self, filename):
+        doc = minidom.parse(filename)
+        root_node = doc.getElementsByTagName("root")[0]
+        for c in root_node.childNodes:
+            if c.nodeType == c.ELEMENT_NODE:
+                self.from_xml(c, doc)
+    
+    def from_xml(self, node, doc):
+
+        self.type = node.nodeName
+        for c in node.childNodes:
+            if c.nodeType == c.ELEMENT_NODE:
+
+                if is_phrase_type( c.nodeName ):
+                    p = Phrase()
+                    p.from_xml( c, doc )
+                    self.children.append( p )
+                
+                elif is_pos_type( c.nodeName ):
+                    w = Word()
+                    w.from_xml( c, doc )   
+                    self.words.append( w )        
    
