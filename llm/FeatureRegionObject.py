@@ -1,10 +1,10 @@
 '''
-Created on Dec 1, 2015
+Created on Dec 3, 2015
 
 @author: walter
 '''
 
-class FeatureObject(object):
+class FeatureRegionObject(object):
 
     def __init__(self):
         self.object_type = None
@@ -13,6 +13,6 @@ class FeatureObject(object):
         self.object_type = int( node.getAttribute("object_type") )
     
     def to_xml(self, parentNode, doc):
-        node = doc.createElement("feature_object")
+        node = doc.createElement("feature_region_object")
         node.setAttribute("object_type", str(self.object_type))
         parentNode.appendChild(node)
