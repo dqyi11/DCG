@@ -1,15 +1,14 @@
 '''
-Created on Dec 1, 2015
+Created on Dec 3, 2015
 
 @author: walter
 '''
 
-class Constraint(object):
+class Region(object):
 
 
     def __init__(self):
-        self.parent = None
-        self.child = None
+        self.object = None
         
     def from_xml(self):
         pass
