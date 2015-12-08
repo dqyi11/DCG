@@ -9,6 +9,7 @@ class DCG(object):
 
 
     def __init__(self):
-        pass
+        self.root = None
+        self.search_spaces = []
 
         
